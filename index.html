@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Pricing Cards</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
+    }
+    .card:hover {
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .card-header {
+      background: #ed1b23;
+      color: white;
+      font-weight: bold;
+      padding: 1rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0 1rem;
+      background: #fff;
+    }
+    .card.active .card-body {
+      max-height: 1000px;
+      padding: 1rem;
+    }
+    .card-body table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+    .card-body th, .card-body td {
+      border: 1px solid #ddd;
+      padding: 0.4rem;
+      text-align: center;
+    }
+    .label {
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+    .highlight {
+      font-weight: bold;
+      color: red;
+    }
+    .past {
+      opacity: 0.6;
+      color: #555;
+    }
+    .section-label {
+      text-align: left;
+      font-weight: bold;
+      background: #eee;
+      padding: 0.3rem 0.5rem;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>All Class Pricing</h1>
+  <div class="grid">
+    <!-- Cards for all classes will be injected here. -->
+  </div>
+  <script>
+    const classes = [
+      // Adult Classes
+      { name: "Solo – Under 40’s", inProgramme: [145, 165, 175, 185], notInProgramme: [200, 250] },
+      { name: "Solo – Over 40’s", inProgramme: [145, 165, 175, 185], notInProgramme: [200, 250] },
+      { name: "Vintage", inProgramme: [129, 149, 159, 169], notInProgramme: [185, 235] },
+      { name: "Quad Solo", inProgramme: [145, 165, 175, 185], notInProgramme: [200, 250] },
+      { name: "Quad 4x4", inProgramme: [145, 165, 175, 185], notInProgramme: [200, 250] },
+      { name: "2Man", inProgramme: [190, 210, 220, 230], notInProgramme: [245, 295] },
+      { name: "Sidecar", inProgramme: [190, 210, 220, 230], notInProgramme: [245, 295] },
+      // Youth Classes
+      { name: "Youth 65", inProgramme: [125, 139, 149, 159], notInProgramme: [165, 215] },
+      { name: "Youth 85BW", inProgramme: [125, 139, 149, 159], notInProgramme: [165, 215] },
+      { name: "Youth 85SW", inProgramme: [125, 139, 149, 159], notInProgramme: [165, 215] },
+      { name: "Youth 125", inProgramme: [125, 139, 149, 159], notInProgramme: [165, 215] },
+      { name: "Youth 250", inProgramme: [125, 139, 149, 159], notInProgramme: [165, 215] }
+    ];
+
+    const inDates = ["31.12.24", "23.03.25", "31.05.25", "07.09.25"];
+    const outDates = ["21.09.25", "26.09.25"];
+    const currentIndex = 3;
+
+    const grid = document.querySelector(".grid");
+
+    classes.forEach(cls => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="card-header">${cls.name}</div>
+        <div class="card-body">
+          <div class="section-label">In Programme</div>
+          <table><tr><th>Date</th><th>Price</th></tr>
+            ${cls.inProgramme.map((price, i) => `
+              <tr><td>${inDates[i]}</td><td class="${i < currentIndex ? 'past' : i === currentIndex ? 'highlight' : ''}">
+                £${price}${i === currentIndex ? ' ← Current Price' : ''}</td></tr>`).join('')}
+          </table>
+          <div class="section-label">Not In Programme</div>
+          <table><tr><th>Date</th><th>Price</th></tr>
+            ${cls.notInProgramme.map((price, i) => `
+              <tr><td>${outDates[i]}</td><td>£${price}</td></tr>`).join('')}
+          </table>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    document.querySelectorAll('.card-header').forEach(header => {
+      header.addEventListener('click', () => {
+        header.closest('.card').classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>
